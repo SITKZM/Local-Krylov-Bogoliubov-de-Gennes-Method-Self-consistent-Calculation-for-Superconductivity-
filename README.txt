@@ -2,7 +2,7 @@
 
 This is the program to calculate
 
-・superconducting order parameter, -U<cc>, at every sites
+・superconducting order parameter, -U<c_↓c_↑>, at every sites
 
 and
 
