@@ -29,6 +29,13 @@ i    j    x_ij    y_ij
 The example file is for one of Penrose approximants.
 
 
+<Added>
+I found that this self-consistent calculation has an initial value dependence with respect to the pair potentials. Therefore, it is necessary to calculate the free energy of the system after all the eigenenergies are also calculated and compare them to determine the appropriate initial value. Free_energy.f90 is the program to calculate it at absolute zero.
+
+Empirically, it seems safe to assume that the value of the imaginary part corresponds to the filling. The imaginary part is 0 at half-filling, and as the filling decreases from there, the imaginary part becomes positive, and as the filling increases, the imaginary part becomes negative (although I have not been able to prove this mathematically).
+
+(February 3, 2023)
+
 
 <Referrence>
 
