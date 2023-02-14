@@ -1,4 +1,4 @@
-<About>
+## About
 
 This is the program to calculate
 
@@ -17,7 +17,7 @@ You can execute the main program, LKBdG.f90, by using the included CSRmod.f90 mo
 
 
 
-<Hop file>
+## Hop file
 
 You have to prepare the hopping indices and the unit vector in the direction.
 
@@ -29,7 +29,7 @@ i    j    x_ij    y_ij
 The example file is for one of Penrose approximants.
 
 
-<Added>
+## Added
 I found that this self-consistent calculation has an initial value dependence with respect to the pair potentials.
 Therefore, it is necessary to calculate the free energy of the system
 after all the eigenenergies are also calculated and compare them to determine the appropriate initial value.
@@ -42,7 +42,7 @@ and as the filling increases, the imaginary part becomes negative (although I ha
 (February 3, 2023)
 
 
-<Referrence>
+## Referrence
 
 [1] Y. Nagai. J. Phys. Soc. Jpn. 89, 074703 (2020).
 [2] R. Ghadimi, T. Sugimoto, K. Tanaka, and T. Tohyama. (2021). Phys. Rev. B. 104, 144511.
