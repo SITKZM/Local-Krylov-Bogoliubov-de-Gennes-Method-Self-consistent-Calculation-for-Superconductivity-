@@ -32,6 +32,7 @@ program LKBdG
         call update_pair_potential()
         call update_particle_number()
         !print *, loop, ".", Delta_error, PN_error
+        if (loop > 500) exit
         loop = loop + 1
     end do
     call system_clock(time_end_c)
