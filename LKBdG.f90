@@ -5,7 +5,7 @@ program LKBdG
     implicit none
     !parameter
     integer, parameter :: N = 3571, allhop = 7186, n_c = 201
-    double precision, parameter :: U = 3.1, mu = -1.55, hsq = 0.35, V = 2.55, pi = 4*atan(1.)
+    double precision, parameter :: U = 3.1, tildemu = 3.8, hsq = 0.35, V = 2.55, pi = 4*atan(1.)
     double precision, parameter :: a = 10., b = 0.
     double precision, parameter :: criterion = 10.**(-6)
     character(7), parameter :: hop_file = "hop.txt"
@@ -14,7 +14,7 @@ program LKBdG
     character(15), parameter :: info_file = "information.txt"
     !variable
     integer :: loop = 1, unit_write_result
-    double precision :: h_z = sqrt(hsq) !hsq = 0にすると対角成分が0になってCSRmodのupdateが効かなくなるので注意
+    double precision :: mu, h_z = sqrt(hsq) !hsq = 0にすると対角成分が0になってCSRmodのupdateが効かなくなるので注意
     double precision :: Chebyshev_integral(n_c), PN(2*N) = [(0.5, loop=1, 2*N)], Delta_error=10., PN_error=10.
     complex(kind(0d0)) :: Delta(N) = [(cmplx(0.3, 0., kind(0d0)), loop=1, N)]
     type(CSRcomplex) :: rescaledH
@@ -28,6 +28,7 @@ program LKBdG
 
     call system_clock(time_begin_c, CountPerSec, CountMax)
     do while (Delta_error > criterion .or. PN_error > criterion)
+        mu = tildemu - U*sum(PN)/(2 * N)
         call update_rescaled_Hamiltonian()
         call update_pair_potential()
         call update_particle_number()
@@ -297,14 +298,14 @@ contains
         open (newunit=unit_write_result, file=info_file)
         write(unit_write_result, *) "Run time=", real(time_end_c - time_begin_c, kind(0d0)) / CountPerSec, "sec"
         write (unit_write_result, *) "Self-consistent loop=", loop
-        write (unit_write_result, *) "N =", N, ",", "U =", U, ",", "mu =", mu, ",", "h_z^2 =", hsq, ",", "V =", V
+        write (unit_write_result, *) "N =", N, ",", "U =", U, ",", "tildemu =", tildemu, ",", "h_z^2 =", hsq, ",", "V =", V
         write (unit_write_result, *) "Delta error =", Delta_error
         write (unit_write_result, *) "Particle number error =", PN_error
         write (unit_write_result, *) "Absolute value of pair potential max, mean, min:"
         write (unit_write_result, *) maxval(abs(Delta)), sum(abs(Delta))/N, minval(abs(Delta))
         write (unit_write_result, *) "Imaginary part of pair potential max, mean, min:"
         write (unit_write_result, *) maxval(aimag(Delta)), sum(aimag(Delta))/N, minval(aimag(Delta))
-        write (unit_write_result, *) "Effective chemical potential =", mu + U*sum(PN)/(2 * N)
+        write (unit_write_result, *) "mu =", mu
         close (unit_write_result)
     end subroutine write_files
 
