@@ -4,8 +4,15 @@ program LKBdG
     use CSRmodules
     implicit none
     !parameter
-    integer, parameter :: N = 3571, allhop = 7186, n_c = 201
-    double precision, parameter :: U = 3.1, tildemu = 3.8, hsq = 0.35, V = 2.55, pi = 4*atan(1.)
+    integer, parameter :: N = 3571
+    integer, parameter :: allhop = 7186
+    integer, parameter :: n_c = 201
+    double precision, parameter :: U = 3.1
+    double precision, parameter :: tildemu = 3.8
+    double precision, parameter :: hsq = 0.35
+    double precision, parameter :: lambda_R = 2.55
+    double precision, parameter :: lambda_D = 1.0
+    double precision, parameter :: pi = 4*atan(1.)
     double precision, parameter :: a = 10., b = 0.
     double precision, parameter :: criterion = 10.**(-6)
     character(7), parameter :: hop_file = "hop.txt"
@@ -106,10 +113,11 @@ contains
             x = x/r
             y = y/r
 
+            ! Rashba
             !iup, jdown
             i = 2*l - 1
             j = 2*m
-            H_ij = V*cmplx(-x, y, kind(0d0))
+            H_ij = lambda_R*cmplx(-x, y, kind(0d0))
 
             call rescaledH%set(H_ij/a, i, j)
             call rescaledH%set(conjg(H_ij)/a, j, i)
@@ -119,7 +127,28 @@ contains
             !idown, jup
             i = 2*l
             j = 2*m - 1
-            H_ij = V*cmplx(x, y, kind(0d0))
+            H_ij = lambda_R*cmplx(x, y, kind(0d0))
+
+            call rescaledH%set(H_ij/a, i, j)
+            call rescaledH%set(conjg(H_ij)/a, j, i)
+            call rescaledH%set(-conjg(H_ij)/a, i + 2*N, j + 2*N)
+            call rescaledH%set(-H_ij/a, j + 2*N, i + 2*N)
+
+            ! Dresselhaus
+            !iup, jdown
+            i = 2*l - 1
+            j = 2*m
+            H_ij = lambda_D*cmplx(-y, x, kind(0d0))
+
+            call rescaledH%set(H_ij/a, i, j)
+            call rescaledH%set(conjg(H_ij)/a, j, i)
+            call rescaledH%set(-conjg(H_ij)/a, i + 2*N, j + 2*N)
+            call rescaledH%set(-H_ij/a, j + 2*N, i + 2*N)
+
+            !idown, jup
+            i = 2*l
+            j = 2*m - 1
+            H_ij = lambda_D*cmplx(y, x, kind(0d0))
 
             call rescaledH%set(H_ij/a, i, j)
             call rescaledH%set(conjg(H_ij)/a, j, i)
@@ -298,7 +327,12 @@ contains
         open (newunit=unit_write_result, file=info_file)
         write(unit_write_result, *) "Run time=", real(time_end_c - time_begin_c, kind(0d0)) / CountPerSec, "sec"
         write (unit_write_result, *) "Self-consistent loop=", loop
-        write (unit_write_result, *) "N =", N, ",", "U =", U, ",", "tildemu =", tildemu, ",", "h_z^2 =", hsq, ",", "V =", V
+        write (unit_write_result, *) "N =", N
+        write (unit_write_result, *) "U =", U
+        write (unit_write_result, *) "tildemu =", tildemu
+        write (unit_write_result, *) "h_z^2 =", hsq
+        write (unit_write_result, *) "lambda_R =", lambda_R
+        write (unit_write_result, *) "lambda_D =", lambda_D
         write (unit_write_result, *) "Delta error =", Delta_error
         write (unit_write_result, *) "Particle number error =", PN_error
         write (unit_write_result, *) "Absolute value of pair potential max, mean, min:"
