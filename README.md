@@ -42,6 +42,12 @@ and as the filling increases, the imaginary part becomes negative (although I ha
 (February 3, 2023)
 
 
+
+I added Dresselhaus spin-orbit interancion terms. The intensity is lambda_D.
+
+(July 4, 2023)
+
+
 ## Referrence
 
 [1] Y. Nagai. J. Phys. Soc. Jpn. 89, 074703 (2020).
