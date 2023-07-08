@@ -113,11 +113,10 @@ contains
             x = x/r
             y = y/r
 
-            ! Rashba
             !iup, jdown
             i = 2*l - 1
             j = 2*m
-            H_ij = lambda_R*cmplx(-x, y, kind(0d0))
+            H_ij = lambda_R*cmplx(-x, y, kind(0d0)) + lambda_D*cmplx(-y, x, kind(0d0))
 
             call rescaledH%set(H_ij/a, i, j)
             call rescaledH%set(conjg(H_ij)/a, j, i)
@@ -127,28 +126,7 @@ contains
             !idown, jup
             i = 2*l
             j = 2*m - 1
-            H_ij = lambda_R*cmplx(x, y, kind(0d0))
-
-            call rescaledH%set(H_ij/a, i, j)
-            call rescaledH%set(conjg(H_ij)/a, j, i)
-            call rescaledH%set(-conjg(H_ij)/a, i + 2*N, j + 2*N)
-            call rescaledH%set(-H_ij/a, j + 2*N, i + 2*N)
-
-            ! Dresselhaus
-            !iup, jdown
-            i = 2*l - 1
-            j = 2*m
-            H_ij = lambda_D*cmplx(-y, x, kind(0d0))
-
-            call rescaledH%set(H_ij/a, i, j)
-            call rescaledH%set(conjg(H_ij)/a, j, i)
-            call rescaledH%set(-conjg(H_ij)/a, i + 2*N, j + 2*N)
-            call rescaledH%set(-H_ij/a, j + 2*N, i + 2*N)
-
-            !idown, jup
-            i = 2*l
-            j = 2*m - 1
-            H_ij = lambda_D*cmplx(y, x, kind(0d0))
+            H_ij = lambda_R*cmplx(x, y, kind(0d0)) + lambda_D*cmplx(y, x, kind(0d0))
 
             call rescaledH%set(H_ij/a, i, j)
             call rescaledH%set(conjg(H_ij)/a, j, i)
